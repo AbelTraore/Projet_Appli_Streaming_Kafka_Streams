@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 
 
 
-object ClientsStreaming {
+object ProducerSemanticsGaranties {
 
 
   def main(args: Array[String]): Unit = {
@@ -36,7 +36,7 @@ object ClientsStreaming {
       }
       producer_Kafka.commitTransaction()
     } catch {
-case ex : Exception =>
+      case ex : Exception =>
         producer_Kafka.abortTransaction()
         println("transaction avortée")
     } finally {
@@ -127,3 +127,4 @@ case ex : Exception =>
 
 
 }
+
