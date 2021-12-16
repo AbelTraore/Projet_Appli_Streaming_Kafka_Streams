@@ -19,6 +19,7 @@
         <scala.compiler.plugin.version>2.15.2</scala.compiler.plugin.version>
         <scala.langage.version>2.11.8</scala.langage.version>
         <jackson.databind.version>2.6.7.3</jackson.databind.version>
+        <slf4j.version>1.7.32</slf4j.version>
     </properties>
 
     <dependencies>
@@ -65,6 +66,19 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.databind.version}</version>
         </dependency>
+
+<!--
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+-->
 
 
 
