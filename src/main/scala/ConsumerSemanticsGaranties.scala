@@ -59,12 +59,12 @@ object ConsumerSemanticsGaranties {
         producer.sendOffsetsToTransaction(liste_offsets, "groupe_orders")
 
       }
-      consumer.commitAsync() // ou bien consumer.commitSync()
+      producer.commitTransaction()
+
       }  catch {
-    case ex: CommitFailedException =>
-      println("erreur dans le commit des offset. Kafka n'a pas reçu le jeton de reconnaissance confirmant que nous avons bien reçu les données")
-    case ex : Exception =>
-      println("erreur dans le consumer")
+    case ex : KafkaException =>
+      producer.abortTransaction()
+      println("erreur dans le consumer. La transaction a été abandonnée")
        }
 
     }
@@ -78,7 +78,7 @@ object ConsumerSemanticsGaranties {
       props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
       props.put(ConsumerConfig.GROUP_ID_CONFIG, KafkaConsumerGroupId)
       props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false")
-      props.put(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, "roundrobin")
+      props.put(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, "org.apache.kafka.clients.consumer.RoundRobinAssignor")
       props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG,"read_committed")
 
       return props
