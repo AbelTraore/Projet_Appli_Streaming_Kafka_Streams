@@ -39,6 +39,8 @@ object ClientsStreaming {
 case ex : Exception =>
         producer_Kafka.abortTransaction()
         println("transaction avortée")
+    } finally {
+      producer_Kafka.close()
     }
 
 
@@ -92,7 +94,7 @@ case ex : Exception =>
     props.put("min.insync.replica", "2")
     props.put(ProducerConfig.RETRIES_CONFIG, "2") //sémantique au moins une fois
 
-    props.put(ProducerConfig.RETRIES_CONFIG, "1") //sémantique au plus une fois
+    //props.put(ProducerConfig.RETRIES_CONFIG, "1") //sémantique au plus une fois
     //activation des transactions sous reserve que "min.insync.replica" >= 2 et replication factor >= 3
     props.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, "transaction_1")
 
