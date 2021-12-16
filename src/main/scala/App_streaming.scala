@@ -15,6 +15,7 @@ import org.apache.kafka.clients.producer._
 import org.apache.kafka.common.serialization._
 import org.apache.kafka.common.serialization.Serdes.String
 import org.apache.kafka.streams.StreamsConfig
+import org.apache.kafka.streams.StreamsConfig
 
 
 
@@ -23,6 +24,9 @@ object App_streaming {
   def main(args: Array[String]): Unit = {
 
     producer_kafka()
+
+    val props : Properties = new Properties()
+    props.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG, "exactly_once")
 
   }
 
