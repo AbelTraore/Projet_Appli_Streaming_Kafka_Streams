@@ -1,17 +1,8 @@
 import org.apache.kafka.streams.scala._
-
 import java.util.Properties
 import org.apache.kafka.streams.{StreamsConfig, Topology}
 import org.apache.kafka.streams.scala.kstream._
 import org.apache.kafka.streams.KafkaStreams
-
-import org.apache.kafka.common.serialization._
-import org.apache.kafka.streams.scala.Serdes._
-import org.apache.kafka.streams.StreamsConfig
-
-
-
-
 
 
 
@@ -19,11 +10,12 @@ object HelloWorld_KafkaStreams {
 
   import org.apache.kafka.streams.scala.ImplicitConversions._
   import org.apache.kafka.streams.scala.Serdes.String
+  import org.apache.kafka.streams.scala.Serdes._
 
   def main(args: Array[String]): Unit = {
 
     val str : StreamsBuilder = new StreamsBuilder()
-    val kstr : KStream[String, String] = str.stream[String, String]("streams_app_upper")
+    val kstr : KStream[String, String] = str.stream[String, String]("streams_app")
     val kstrMaj : KStream[String, String] = kstr.mapValues(v => v.toUpperCase)
     kstrMaj.to("streams_app_upper")
 
@@ -42,10 +34,11 @@ def getParams(bootStrapServer : String) : Properties = {
   val props : Properties = new Properties()
   props.put(StreamsConfig.APPLICATION_ID_CONFIG, "hello world")
   props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapServer)
-  props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, "org.apache.kafka.streams.scala.Serdes.String")
-  props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, "org.apache.kafka.streams.scala.Serdes.String")
+ // props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, "Serdes.String().getClass().getName()")
+ // props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, "Serdes.String().getClass().getName()")
   props.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG, StreamsConfig.EXACTLY_ONCE)
   props.put("auto.offset.reset.config", "latest")
+  //props.put("consumer.group.id", "hello world")
 
 
   props
