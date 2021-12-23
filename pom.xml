@@ -20,6 +20,8 @@
         <scala.langage.version>2.11.8</scala.langage.version>
         <jackson.databind.version>2.6.7.3</jackson.databind.version>
         <slf4j.version>1.7.32</slf4j.version>
+        <jackson.schemaPOJO.version>2.5.4</jackson.schemaPOJO.version>
+        <apache.comon.version>2.4</apache.comon.version>
     </properties>
 
     <dependencies>
@@ -64,7 +66,14 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson.databind.version}</version>
+            <version>${jackson.schemaPOJO.version}</version>
+        </dependency>
+
+        <!-- apache common library -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>${apache.comon.version}</version>
         </dependency>
 
 <!--
@@ -116,6 +125,27 @@
             <configuration>
                 <scalaVersion>${scala.langage.version}</scalaVersion>
             </configuration>
+        </plugin>
+
+        <!-- Json Schema to POJO Maven plugin-->
+        <plugin>
+            <groupId>org.jsonschema2pojo</groupId>
+            <artifactId>jsonschema2pojo-maven-plugin</artifactId>
+            <version>0.5.1</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>generate</goal>
+                    </goals>
+                    <configuration>
+                        <sourceDirectory>${project.basedir}/src/main/resources/schemas/</sourceDirectory>
+                        <outputDirectory>${project.basedir}/src/main/scala/</outputDirectory>
+                        <includeAdditionalProperties>false</includeAdditionalProperties>
+                        <includeHashcodeAndEquals>false</includeHashcodeAndEquals>
+                        <generateBuilders>true</generateBuilders>
+                    </configuration>
+                </execution>
+            </executions>
         </plugin>
 
     </plugins>
