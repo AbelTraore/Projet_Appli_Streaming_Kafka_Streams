@@ -22,6 +22,7 @@
         <slf4j.version>1.7.32</slf4j.version>
         <jackson.schemaPOJO.version>2.5.4</jackson.schemaPOJO.version>
         <apache.comon.version>2.4</apache.comon.version>
+        <jackson.scala.module.version>2.10.0</jackson.scala.module.version>
     </properties>
 
     <dependencies>
@@ -62,12 +63,12 @@
             <version>${scala.langage.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.schemaPOJO.version}</version>
-        </dependency>
+        </dependency> -->
 
         <!-- apache common library -->
         <dependency>
@@ -76,18 +77,26 @@
             <version>${apache.comon.version}</version>
         </dependency>
 
-<!--
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-scala -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-scala_2.11</artifactId>
+            <version>${jackson.scala.module.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
--->
+
+
+        <!--
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                    <version>${slf4j.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-simple</artifactId>
+                    <version>${slf4j.version}</version>
+                </dependency>
+        -->
 
 
 
