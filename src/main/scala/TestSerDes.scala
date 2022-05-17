@@ -30,7 +30,9 @@ object TestSerDes extends App {
   val d = objetMapper.readValue(s, classOf[Facture]) // désérialisation
   val db = objetMapper.readValue(sb, classOf[Facture])
 
-  println(db)
+  print(db)
+
+
 
 
 
