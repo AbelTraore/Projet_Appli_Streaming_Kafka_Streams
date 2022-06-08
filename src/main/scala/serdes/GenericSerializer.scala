@@ -12,7 +12,7 @@ class GenericSerializer[T] extends Serializer[T] {
 
   override def configure(configs : util.Map[String, _], isKey: Boolean) : Unit = {}
 
-  override def serialize(s: String, data: T): Array[Byte] = {
+  override def serialize(topic: String, data: T): Array[Byte] = {
     if (data == null) {
       return null
     }else {
@@ -21,7 +21,7 @@ class GenericSerializer[T] extends Serializer[T] {
         arrBytes
       } catch {
         // gestionnaire d'erreur de la bibliothèque de Serdes que j'ai choisi
-        case e : Exception => throw new Exception(s"Erreur dans la sérialisation de  + ${data.getClass.getName}")
+        case e : Exception => throw new Exception(s"Erreur dans la sérialisation de  + ${data.getClass.getName}. Détails de l'erreur : ${e}")
 
       }
     }
