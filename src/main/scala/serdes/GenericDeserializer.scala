@@ -1,5 +1,6 @@
 package serdes
 
+import org.apache.kafka.common.serialization
 import org.apache.kafka.common.serialization.Deserializer
 
 import java.util
