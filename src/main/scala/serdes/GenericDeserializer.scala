@@ -6,7 +6,7 @@ import org.apache.kafka.common.serialization.Deserializer
 import java.util
 
 
-
+/*
 class GenericDeserializer[T] extends Deserializer[T] {
 
   private val genT = classOf[T]
@@ -27,3 +27,5 @@ class GenericDeserializer[T] extends Deserializer[T] {
   override def close(): Unit = {}
 
 }
+
+ */

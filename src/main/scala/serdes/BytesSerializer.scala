@@ -1,15 +1,14 @@
 package serdes
 
 import org.apache.kafka.common.serialization.Serializer
+
 import java.io.{ByteArrayOutputStream, ObjectOutputStream}
 import java.util
 
 
 
+class BytesSerializer[T] extends Serializer[T] {
 
-class GenericSerializer[T] extends Serializer[T] {
-
-  private val arrBytes = Array.emptyByteArray
 
   override def configure(configs : util.Map[String, _], isKey: Boolean) : Unit = {}
 
@@ -18,8 +17,16 @@ class GenericSerializer[T] extends Serializer[T] {
       return null
     }else {
       try {
+
         //c'est ici qu'on procède à la sérialisation
-        arrBytes
+        val bts = new ByteArrayOutputStream()
+        val ost = new ObjectOutputStream(bts)
+
+        ost.writeObject(data)
+        ost.close()
+
+        bts.toByteArray
+
       } catch {
         // gestionnaire d'erreur de la bibliothèque de Serdes que j'ai choisi
         case e : Exception => throw new Exception(s"Erreur dans la sérialisation de  + ${data.getClass.getName}. Détails de l'erreur : ${e}")
