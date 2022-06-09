@@ -5,11 +5,12 @@ import org.apache.kafka.common.serialization.Deserializer
 
 import java.util
 
+import scala.reflect._
 
 /*
-class GenericDeserializer[T] extends Deserializer[T] {
+class GenericDeserializer[T : ClassTag] extends Deserializer[T] {
 
-  private val genT = classOf[T]
+  private var genT = classOf[T]
 
   override def configure(configs: util.Map[String, _], isKey: Boolean): Unit = {}
 
@@ -17,7 +18,8 @@ class GenericDeserializer[T] extends Deserializer[T] {
 
     try {
           // processus de désérialisation ici
-          genT.newInstance()
+      genT.newInstance()
+
 
         } catch {
           case e: Exception => throw  new Exception(s"Erreur dans la désérialisation du message. Détails de l'erreur : ${e}")
@@ -29,3 +31,4 @@ class GenericDeserializer[T] extends Deserializer[T] {
 }
 
  */
+
