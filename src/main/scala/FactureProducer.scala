@@ -1,6 +1,8 @@
 import java.util.Properties
 import org.apache.kafka.clients.producer.{ProducerRecord, _}
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import org.apache.kafka.common.serialization.BytesSerializer
+import org.apache.kafka.clients.producer._
 import serdes._
 import schemas._
 
@@ -11,8 +13,7 @@ object FactureProducer extends App {
   props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[JSONSerializer[Facture]])
   props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
 
-  val facture1 = List(
-    Facture("a320", "téléviseur LG 3A Nano", 3, 3350.75, OrderLine("34e", "45i", "20/09/2010", "20/09/2010", 15.00, 700, 10)),
+  val facture1 = List(Facture("a320", "téléviseur LG 3A Nano", 3, 3350.75, OrderLine("34e", "45i", "20/09/2010", "20/09/2010", 15.00, 700, 10)),
     Facture("a321", "téléviseur LG ", 3, 3350.75, OrderLine("34e", "45i", "20/09/2010", "20/09/2010", 15.00, 700, 10)),
     Facture("a322", "téléviseur LG 3A Nano", 3, 3350.75, OrderLine("34e", "45i", "20/09/2010", "20/09/2010", 15.00, 700, 10)),
     Facture("a323", "téléviseur LG 3A ", 1, 3350.75, OrderLine("34e", "45i", "20/09/2010", "20/09/2010", 15.00, 700, 10)),
@@ -25,10 +26,10 @@ object FactureProducer extends App {
 
 
   facture1.foreach{
-    e => factureProducer.send(new ProducerRecord[String, Facture]("", e.factureid, e))
+    e => factureProducer.send(new ProducerRecord[String, Facture]("factureBin1", e.factureid, e))
       Thread.sleep(3000)
   }
 
-  println(("rajout effectué avec succès !"))
+  println("rajout effectué avec succès !")
 
 }

@@ -5,7 +5,7 @@ import schemas.Facture
 
 import java.util
 
-
+/*
 class JSONSerDes[T] extends Serde[T] {
 
   override def configure(configs: util.Map[String, _], isKey: Boolean): Unit = {}
@@ -17,3 +17,6 @@ class JSONSerDes[T] extends Serde[T] {
   override def deserializer(): Deserializer[Facture] = new JSONDeserializer
 
 }
+
+*/
+

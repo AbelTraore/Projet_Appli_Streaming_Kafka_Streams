@@ -6,8 +6,7 @@ import org.apache.kafka.streams.scala.kstream._
 import org.apache.kafka.streams.KafkaStreams
 import HelloWorld_KafkaStreams._
 import schemas.{Facture, OrderLine}
-import serdes.{BytesSerdes, BytesSerializer, BytesDeserializer}
-
+import serdes.{BytesDeserializer, BytesSerdes, BytesSerializer, JSONDeserializer, JSONSerializer}
 import org.apache.kafka.common.serialization.{Serde, Serdes}
 
 
@@ -17,16 +16,17 @@ object CustomSerdesUsage extends App {
   import org.apache.kafka.streams.scala.Serdes.String
   import org.apache.kafka.streams.scala.Serdes.Integer
 
-/*
+
   //1ère méthode d'utilisation des custum serdes
   implicit val bytesSerdes = new BytesSerdes[Facture]
   implicit val bytesOrdersSerdes = new BytesSerdes[OrderLine]
-*/
+
 
   //2ème méthode d'utilisation des custum serdes
   implicit val factureSerdes: Serde[Facture] = Serdes.serdeFrom[Facture](new BytesSerializer[Facture], new BytesDeserializer[Facture])
   implicit val consumed : Consumed[String, Facture] = Consumed.`with`(Serdes.String(), factureSerdes)
   implicit val produced : Produced[String, Facture] = Produced.`with`(Serdes.String(),factureSerdes)
+  implicit val jsonSerdes : Serde[Facture]= Serdes.serdeFrom(new  JSONSerializer[Facture], new JSONDeserializer)
 
 
     val str : StreamsBuilder = new StreamsBuilder()
