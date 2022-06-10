@@ -2,10 +2,9 @@ package serdes
 
 import org.apache.kafka.common.serialization.{Deserializer, Serde, Serializer}
 import schemas.Facture
-import schemas.Facture
-//import serdes.{JSONDeserializer, JSONSerializer}
 
 import java.util
+
 
 class JSONSerDes[T] extends Serde[T] {
 
@@ -15,6 +14,6 @@ class JSONSerDes[T] extends Serde[T] {
 
   override def serializer(): Serializer[T] = new JSONSerializer[T]
 
-  override def deserializer(): Deserializer[T] = new JSONDeserializer[T]
+  override def deserializer(): Deserializer[Facture] = new JSONDeserializer
 
 }

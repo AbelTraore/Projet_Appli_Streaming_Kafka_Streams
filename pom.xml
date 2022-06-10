@@ -23,6 +23,7 @@
         <jackson.schemaPOJO.version>2.5.4</jackson.schemaPOJO.version>
         <apache.comon.version>2.4</apache.comon.version>
         <jackson.scala.module.version>2.10.0</jackson.scala.module.version>
+        <avro.maven.plugin.version>1.10.1</avro.maven.plugin.version>
     </properties>
 
     <dependencies>
@@ -99,6 +100,13 @@
         -->
 
 
+        <!-- dépendance pour construction du SerDes Avro -->
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>${avro.maven.plugin.version}</version>
+        </dependency>
+
 
     </dependencies>
 
@@ -136,7 +144,7 @@
             </configuration>
         </plugin>
 
-        <!-- Json Schema to POJO Maven plugin-->
+        <!-- Json Schema to POJO Maven plugin -->
         <plugin>
             <groupId>org.jsonschema2pojo</groupId>
             <artifactId>jsonschema2pojo-maven-plugin</artifactId>
@@ -152,6 +160,26 @@
                         <includeAdditionalProperties>false</includeAdditionalProperties>
                         <includeHashcodeAndEquals>false</includeHashcodeAndEquals>
                         <generateBuilders>true</generateBuilders>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+
+
+        <!-- Avro Schema to POJO Maven plugin -->
+        <plugin>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro-maven-plugin</artifactId>
+            <version>${avro.maven.plugin.version}</version>
+            <executions>
+                <execution>
+                    <phase>generate-sources</phase>
+                    <goals>
+                        <goal>schema</goal>
+                    </goals>
+                    <configuration>
+                        <sourceDirectory>${project.basedir}/src/main/resources/schemas/</sourceDirectory>
+                        <outputDirectory>${project.basedir}/src/main/scala/schemas</outputDirectory>
                     </configuration>
                 </execution>
             </executions>
