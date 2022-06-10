@@ -4,11 +4,10 @@ import org.apache.kafka.common.serialization
 import org.apache.kafka.common.serialization.Deserializer
 
 import java.util
-
 import scala.reflect._
 
 /*
-class GenericDeserializer[T : ClassTag] extends Deserializer[T] {
+class GenericDeserializer[T] extends Deserializer[T] {
 
   private var genT = classOf[T]
 
@@ -29,6 +28,6 @@ class GenericDeserializer[T : ClassTag] extends Deserializer[T] {
   override def close(): Unit = {}
 
 }
+*/
 
- */
 

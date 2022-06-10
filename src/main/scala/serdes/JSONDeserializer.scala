@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import org.apache.kafka.common.serialization.Deserializer
 import schemas.Facture
 
+import scala.reflect._
+
 
 
 class JSONDeserializer extends Deserializer[Facture] {
@@ -26,6 +28,7 @@ class JSONDeserializer extends Deserializer[Facture] {
 
     try {
       // processus de désérialisation ici
+      //val d = objetMapper.readValue(data, classTag[T].runtimeClass.asInstanceOf[ClassTag[T]]) //ne fonctionne pas??
       val d = objetMapper.readValue(data, classOf[Facture])
       d
 
