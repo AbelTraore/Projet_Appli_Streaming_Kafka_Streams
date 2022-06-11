@@ -26,7 +26,7 @@ object FactureProducer extends App {
 
 
   facture1.foreach{
-    e => factureProducer.send(new ProducerRecord[String, Facture]("factureBin1", e.factureid, e))
+    e => factureProducer.send(new ProducerRecord[String, Facture]("factureBinJSO", e.factureid, e))
       Thread.sleep(3000)
   }
 

@@ -22,7 +22,7 @@ object FactureConsumer extends App {
 
   val factureConsumer = new KafkaConsumer[String, Facture](props)
 
-  factureConsumer.subscribe(Collections.singletonList("factureBin1"))
+  factureConsumer.subscribe(Collections.singletonList("factureBinJSO"))
 
   while(true) {
     val messages : ConsumerRecords[String, Facture] = factureConsumer.poll(Duration.ofSeconds(3))

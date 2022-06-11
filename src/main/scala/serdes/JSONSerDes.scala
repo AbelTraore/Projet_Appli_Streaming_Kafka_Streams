@@ -17,6 +17,6 @@ class JSONSerDes[T] extends Serde[T] {
   override def deserializer(): Deserializer[Facture] = new JSONDeserializer
 
 }
-
 */
+
 
