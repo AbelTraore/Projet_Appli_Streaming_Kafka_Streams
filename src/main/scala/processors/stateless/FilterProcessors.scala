@@ -1,5 +1,6 @@
 package processors.stateless
 
+
 import org.apache.kafka.streams.scala._
 
 import java.util.Properties
@@ -11,7 +12,7 @@ import serdes.{JSONDeserializer, JSONSerializer}
 import org.apache.kafka.common.serialization.{Serde, Serdes}
 
 
-object MapProcessors extends App {
+object FilterProcessors extends App {
 
 
   implicit val jsonSerdes: Serde[Facture] = Serdes.serdeFrom(new JSONSerializer[Facture], new JSONDeserializer)
@@ -25,11 +26,12 @@ object MapProcessors extends App {
   val str: StreamsBuilder = new StreamsBuilder()
   val kstrFacture: KStream[String, Facture] = str.stream[String, Facture]("factureBinJSO")
 
-  //utilisation d'un MapValue()
+  //utilisation de Filter() / FilterNot()
   val kstrTotal : KStream[String, Double] = kstrFacture.mapValues(f => f.orderLine.numunits * f.orderLine.unitprice)
+  val kstrFilt = kstrTotal.filter((_,t) => t > 2000)
 
-  //utilisation d'un Map() - cause les données à être marqué pour re-partitionnement
-  val kstrTotal2 : KStream[String, Double] = kstrFacture.map((k,f) => (k.substring(2), f.orderLine.numunits * f.orderLine.unitprice))
+  val kstrFiltNot = kstrTotal.filterNot((_,t) => t > 2000)
+
 
   val topologie: Topology = str.build()
   val kkStream: KafkaStreams = new KafkaStreams(topologie, props)
@@ -38,5 +40,6 @@ object MapProcessors extends App {
   sys.ShutdownHookThread {
     kkStream.close()
   }
+
 
 }
