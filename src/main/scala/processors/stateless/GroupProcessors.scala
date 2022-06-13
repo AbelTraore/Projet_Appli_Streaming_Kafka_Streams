@@ -12,6 +12,7 @@ import schemas.{Facture, OrderLine}
 import serdes.{JSONDeserializer, JSONSerializer}
 import org.apache.kafka.common.serialization.{Serde, Serdes}
 import org.apache.kafka.streams.kstream.Printed
+import org.apache.kafka.streams.scala.Serdes._
 
 
 object GroupProcessors extends App {

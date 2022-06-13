@@ -11,6 +11,9 @@ import schemas.{Facture, OrderLine}
 import serdes.{JSONDeserializer, JSONSerializer}
 import org.apache.kafka.common.serialization.{Serde, Serdes}
 import org.apache.kafka.streams.kstream.Printed
+import org.apache.kafka.streams.scala.Serdes.String
+import org.apache.kafka.streams.scala.Serdes._
+import processors.stateless.CustomPartionner
 
 
 object WriteProcessors extends App {
@@ -48,6 +51,9 @@ object WriteProcessors extends App {
   kstr.repartition(Repartitioned.numberOfPartitions(3).withName("nom_topic_interne"))
   t = through() => str.stream(t)
    */
+
+  // écriture dans un topic via un custom partitionner
+  val t2 = newKeys.through("topic_test")(Produced.`with`(new CustomPartionner))
 
   //transformation de KStreams en KTable
   val kaTable = str.table[String, Facture]("factureBinJSO")(Consumed.`with`(Serdes.String(), jsonSerdes))
