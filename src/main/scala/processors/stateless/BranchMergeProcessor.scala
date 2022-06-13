@@ -1,5 +1,6 @@
 package processors.stateless
 
+
 import org.apache.kafka.streams.scala._
 
 import java.util.Properties
@@ -12,47 +13,46 @@ import org.apache.kafka.common.serialization.{Serde, Serdes}
 import org.apache.kafka.streams.kstream.Printed
 
 
-
-object ActionProcessors extends App {
+object BranchMergeProcessor extends App {
 
   implicit val jsonSerdes: Serde[Facture] = Serdes.serdeFrom(new JSONSerializer[Facture], new JSONDeserializer)
   implicit val consumed: Consumed[String, Facture] = Consumed.`with`(Serdes.String(), jsonSerdes)
   implicit val produced: Produced[String, Facture] = Produced.`with`(Serdes.String(), jsonSerdes)
 
   val props: Properties = new Properties()
-  props.put(StreamsConfig.APPLICATION_ID_CONFIG, "print-processor")
+  props.put(StreamsConfig.APPLICATION_ID_CONFIG, "branch-processor")
   props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
 
   val str: StreamsBuilder = new StreamsBuilder()
   val kstrFacture: KStream[String, Facture] = str.stream[String, Facture]("factureBinJSO")
-  val kstrProducts: KStream[String, Array[String]] = kstrFacture.flatMapValues(f => List(f.productName.split(" ")))
+  val kstrTotal : KStream[String, Double] = kstrFacture.mapValues(f => f.orderLine.numunits * f.orderLine.unitprice)
 
 
-  val kstrTotal : KStream[String, Double] = kstrFacture.flatMapValues(f => List(f.orderLine.numunits * f.orderLine.unitprice, f.orderLine.numunits, f.orderLine.unitprice))
+  val kstBranch : Array[KStream[String, Double]] = kstrTotal.branch(
+    (_, t) => t >= 10000,
+    (_, t) => t > 5000,
+    (_, t) => t > 2000,
+    (_, t) => t <= 2000
+  )
 
-  val kstrTotal2 : KStream[String, Double] = kstrFacture.flatMap((k,f) => List(
-    (k.toUpperCase(), f.orderLine.numunits * f.orderLine.unitprice),
-    (k.substring(1, 2),f.orderLine.numunits),
-    (k.substring(1),f.orderLine.unitprice)
-  ))
-
-
-  kstrTotal2.foreach { (k, v) =>
-    println("valeur du message :" + v + " clé du message " + k)
+  val kstr2K = kstBranch(3)
+  kstr2K.foreach{ (k, m) =>
+    println(s"factures avec un total supérieur à 2K : ${m}")
   }
 
+  //méthode 2
+  val liste_predicats : List[(String, Double) => Boolean] = List(
+    (_, t) => t >= 10000,
+    (_, t) => t > 5000,
+    (_, t) => t > 2000,
+    (_, t) => t <= 2000
+  )
 
-  val kts = kstrTotal2.peek { (k, v) =>
-    println("valeur du message :" + v + " clé du message " + k)
-  }
-  kts.mapValues(e => e)
-  val kstrFilt = kstrTotal.filter((_,t) => t > 2000)
+  val kstBranch2 : Array[KStream[String, Double]] = kstrTotal.branch(liste_predicats : _*)
+  val kstr10K = kstBranch(0)
 
-  kstrTotal2.print(Printed.toFile("/monchemin.bat").withLabel("print"))
-  kstrTotal2.print(Printed.toSysOut().withLabel("test"))
-
-
-
+  val kMerge = kstr2K.merge(kstr10K.merge(kstBranch(1)))
+//kstr2K => kstr10K => kstr5K
 
   val topologie: Topology = str.build()
   val kkStream: KafkaStreams = new KafkaStreams(topologie, props)
@@ -61,6 +61,7 @@ object ActionProcessors extends App {
   sys.ShutdownHookThread {
     kkStream.close()
   }
+
 
 
 }
