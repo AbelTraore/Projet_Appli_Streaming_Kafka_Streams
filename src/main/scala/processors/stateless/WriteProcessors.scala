@@ -27,7 +27,7 @@ object WriteProcessors extends App {
   props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
 
   val str: StreamsBuilder = new StreamsBuilder()
-  val kstrFacture: KStream[String, Facture] = str.stream[String, Facture]("factureBinJSO")
+  val kstrFacture: KStream[String, Facture] = str.stream[String, Facture]("factureBinJSO1")
   val kstrTotal : KStream[String, Double] = kstrFacture.mapValues(f => f.orderLine.numunits * f.orderLine.unitprice)
 
   // selectKey()
@@ -35,16 +35,16 @@ object WriteProcessors extends App {
   newKeys.print(Printed.toSysOut().withLabel("Select keys"))
 
   // GroupByKey()
-  val kstGroupKeys = newKeys.groupByKey(Grouped.`with`(Serdes.String(), Serdes.Double()))
+  val kstGroupKeys = newKeys.groupByKey(Grouped.`with`(String, Double))
 
   //GroupBy()
-  val kstrGroupBy = newKeys.groupBy((k, v) => v)(Grouped.`with`(Serdes.String(), Serdes.Double()))
+  val kstrGroupBy = newKeys.groupBy((k, v) => v)(Grouped.`with`(Double, Double))
 
   // écriture dans un topic Kafka existant - opération finale
-  newKeys.to("topic_test")(Produced.`with`(Serdes.String(), Serdes.Double()))
+  newKeys.to("topic_test1")(Produced.`with`(String, Double))
 
   // écriture dans un topic Kafka existant - opération non - finale
-  val t = newKeys.through("topic_test")(Produced.`with`(Serdes.String(), Serdes.Double()))
+  val t = newKeys.through("topic_test1")(Produced.`with`(String, Double))
 
   /*
   // disponible uniquement à partir de la version 2.6.0 de Kafka Streams.

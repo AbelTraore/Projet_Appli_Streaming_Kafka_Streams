@@ -18,8 +18,8 @@ import org.apache.kafka.streams.scala.Serdes._
 object GroupProcessors extends App {
 
   implicit val jsonSerdes: Serde[Facture] = Serdes.serdeFrom(new JSONSerializer[Facture], new JSONDeserializer)
-  implicit val consumed: Consumed[String, Facture] = Consumed.`with`(Serdes.String(), jsonSerdes)
-  implicit val produced: Produced[String, Facture] = Produced.`with`(Serdes.String(), jsonSerdes)
+  implicit val consumed: Consumed[String, Facture] = Consumed.`with`(String, jsonSerdes)
+  implicit val produced: Produced[String, Facture] = Produced.`with`(String, jsonSerdes)
 
   val props: Properties = new Properties()
   props.put(StreamsConfig.APPLICATION_ID_CONFIG, "group-processor")
@@ -34,10 +34,10 @@ object GroupProcessors extends App {
   newKeys.print(Printed.toSysOut().withLabel("Select keys"))
 
   // GroupByKey()
-  val kstGroupKeys = newKeys.groupByKey(Grouped.`with`(Serdes.String(), Serdes.Double()))
+  val kstGroupKeys = newKeys.groupByKey(Grouped.`with`(String, Double))
 
   //GroupBy()
-  val kstrGroupBy = newKeys.groupBy((k, v) => v)(Grouped.`with`(Serdes.String(), Serdes.Double()))
+  val kstrGroupBy = newKeys.groupBy((k, v) => v)(Grouped.`with`(Double, Double))
 
 
   val topologie: Topology = str.build()
