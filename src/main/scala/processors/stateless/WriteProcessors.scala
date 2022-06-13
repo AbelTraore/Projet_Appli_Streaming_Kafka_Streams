@@ -43,6 +43,15 @@ object WriteProcessors extends App {
   // écriture dans un topic Kafka existant - opération non - finale
   val t = newKeys.through("topic_test")(Produced.`with`(Serdes.String(), Serdes.Double()))
 
+  /*
+  // disponible uniquement à partir de la version 2.6.0 de Kafka Streams.
+  kstr.repartition(Repartitioned.numberOfPartitions(3).withName("nom_topic_interne"))
+  t = through() => str.stream(t)
+   */
+
+  //transformation de KStreams en KTable
+  val kaTable = str.table[String, Facture]("factureBinJSO")(Consumed.`with`(Serdes.String(), jsonSerdes))
+
   val topologie: Topology = str.build()
   val kkStream: KafkaStreams = new KafkaStreams(topologie, props)
   kkStream.start()
