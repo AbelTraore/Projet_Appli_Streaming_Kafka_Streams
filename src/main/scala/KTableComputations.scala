@@ -24,6 +24,7 @@ object KTableComputations extends App {
 
 
   val str : StreamsBuilder = new StreamsBuilder()
+ // val ktblTest: KTable[String, String] = str.table("ktabletest") //sans déclaration de state_store
   val ktblTest: KTable[String, String] = str.table("ktabletest", Materialized.as("STATE-STORE-STR"))
 
   //val kTble2 : KTable[String, String] = str.table("ktabletest", Materialized.as("STATE-STORE-STR"))
