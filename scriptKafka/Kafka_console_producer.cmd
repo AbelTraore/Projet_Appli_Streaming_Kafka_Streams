@@ -1,2 +1,2 @@
 :: #Démarrage console Producer :
-%KAFKA_HOME%\bin\windows\kafka-console-producer.bat --broker-list localhost:9092 --topic streams_app
+%KAFKA_HOME%\bin\windows\kafka-console-producer.bat --broker-list localhost:9092 --topic ktabletest --property "parse.key=true" --property "key.separator=::"
