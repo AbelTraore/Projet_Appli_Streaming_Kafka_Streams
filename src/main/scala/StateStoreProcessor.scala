@@ -5,12 +5,12 @@ import java.util.Properties
 import org.apache.kafka.streams.{StreamsConfig, Topology}
 import org.apache.kafka.streams.scala.kstream._
 import org.apache.kafka.streams.KafkaStreams
-import org.apache.kafka.streams.kstream.Printed
+import org.apache.kafka.streams.state.{KeyValueBytesStoreSupplier, KeyValueStore, StoreBuilder, Stores}
 
 import java.time.Duration
 
 
-object KTableComputations extends App {
+object StateStoreProcessor extends App {
 
 
   import org.apache.kafka.streams.scala.ImplicitConversions._
@@ -18,19 +18,21 @@ object KTableComputations extends App {
 
 
   val props: Properties = new Properties()
-  props.put(StreamsConfig.APPLICATION_ID_CONFIG, "ktable-print")
+  props.put(StreamsConfig.APPLICATION_ID_CONFIG, "state-store-prc")
   props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
+
+  val factureStoreName = "factureStore"
+  val factureStoreSupplier : KeyValueBytesStoreSupplier = Stores.persistentKeyValueStore(factureStoreName)
+  val factureStoreBuilder : StoreBuilder[KeyValueStore[String, String]] = Stores.keyValueStoreBuilder(factureStoreSupplier, String, String)
+  val factureStore = factureStoreBuilder.build()
 
 
   val str : StreamsBuilder = new StreamsBuilder()
- // val ktblTest: KTable[String, String] = str.table("ktabletest") //sans déclaration de state_store
-  val ktblTest: KTable[String, String] = str.table("ktabletest", Materialized.as("STATE-STORE-STR"))
 
-  //val kTble2 : KTable[String, String] = str.table("ktabletest", Materialized.as("STATE-STORE-STR"))
 
-  ktblTest.toStream.print(Printed.toSysOut().withLabel("Clé/Valeur du KTable"))
+  factureStore.put("FR", "FRANCE")
+  val etat = factureStore.get("FR")
 
- val ks =  ktblTest.toStream
 
 
   val topologie: Topology = str.build()
@@ -38,6 +40,7 @@ object KTableComputations extends App {
   kkStream.start()
 
   sys.ShutdownHookThread {
+    factureStore.close()
     kkStream.close()
   }
 
