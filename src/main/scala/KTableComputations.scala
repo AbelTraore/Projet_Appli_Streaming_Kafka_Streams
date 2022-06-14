@@ -24,9 +24,14 @@ object KTableComputations extends App {
 
 
   val str : StreamsBuilder = new StreamsBuilder()
-  val ktblTest: KTable[String, String] = str.table("ktabletest")
+  val ktblTest: KTable[String, String] = str.table("ktabletest", Materialized.as("STATE-STORE-STR"))
+
+  //val kTble2 : KTable[String, String] = str.table("ktabletest", Materialized.as("STATE-STORE-STR"))
 
   ktblTest.toStream.print(Printed.toSysOut().withLabel("Clé/Valeur du KTable"))
+
+ val ks =  ktblTest.toStream
+
 
   val topologie: Topology = str.build()
   val kkStream: KafkaStreams = new KafkaStreams(topologie, props)
