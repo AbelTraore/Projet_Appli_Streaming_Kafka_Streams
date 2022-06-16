@@ -21,7 +21,7 @@ object TransformValueProcessor extends App {
   implicit val produced : Produced[String, Facture] = Produced.`with`(Serdes.String(),factureSerdes)
 
   val props: Properties = new Properties()
-  props.put(StreamsConfig.APPLICATION_ID_CONFIG, "transformValue5-processor")
+  props.put(StreamsConfig.APPLICATION_ID_CONFIG, "transformValue4-processor")
   props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
 
   val props_state : java.util.Map[String, String] = new java.util.HashMap[String, String]()
