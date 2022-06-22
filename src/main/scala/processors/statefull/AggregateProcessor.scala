@@ -36,7 +36,7 @@ object AggregateProcessor extends App {
   val kCA = kstrFacture
     .map((k, f) => ("1", f.total))
     .groupBy((k, t) => k)(Grouped.`with`(String, Double ))
-    .aggregate(0D)((key, newValue, aggValue) => aggValue + newValue)(Materialized.as("AggregateStore")(String, Double))
+    .aggregate[Double](0D)((key, newValue, aggValue) => aggValue + newValue)(Materialized.as("AggregateStore3")(String, Double))
 
 
   kCA.toStream.print(Printed.toSysOut().withLabel("Chiffre d'affaire global"))
@@ -45,9 +45,8 @@ object AggregateProcessor extends App {
   // méthode 2
   val kCA2 = kstrFacture
     .map((k, f) => ("1", f))
-    .groupBy((k, t) => k)(Grouped.`with`(String, Double ))
-    .aggregate[Double](0)((k, newFacture, aggFacture) => newFacture.total + aggFacture)(Materialized.as("AggregateStore-2"))
-
+    .groupBy((k, t) => k)(Grouped.`with`(String, Double))
+    .aggregate[Double](0)((k, newFacture, aggFacture) => newFacture.total + aggFacture)(Materialized.as("AggregateStore - M2")(String, Double))
 
 
   kCA2.toStream.print(Printed.toSysOut().withLabel("Chiffre d'affaire global - M2"))
@@ -58,10 +57,17 @@ object AggregateProcessor extends App {
   // calcul du chiffre d'affaire moyen
   val kCA3 = kstrFacture
     .map((k, f) => ("1", f))
-    .groupBy((k, t) => k)
-    .aggregate[Facture](Facture("", "", 0, 0D, OrderLine("", "", "", "", 0D, 0D, 0)))(
-      (key, newFacture, aggFacture) => Facture(newFacture.factureid, "", newFacture.quantite + aggFacture.quantite,
-        newFacture.total + aggFacture.total, OrderLine("", "", "", "", 0D, 0D, 0)))
+    .groupBy((k, t) => k)(Grouped.`with`(String, Double))
+    .aggregate[Facture](Facture("", "", 0, 0D, OrderLine("", "", "", "", 0D,0D, 0)))(
+      (key, newFacture, aggFacture) =>
+        Facture(newFacture.factureid, "",
+          newFacture.quantite + aggFacture.quantite,
+          newFacture.total + aggFacture.total,
+          OrderLine("", "", "", "", 0D,0D, 0))
+    )(Materialized.as("AggregateStore - M2")(String, Double)
+    .mapValues(f => (f.quantite, f.total, f.total/f.quantite))
+
+  kCA3.toStream.print(Printed.toSysOut().withLabel("Panier moyen du consommateur - M3"))
 */
 
   val topologie : Topology = str.build()
