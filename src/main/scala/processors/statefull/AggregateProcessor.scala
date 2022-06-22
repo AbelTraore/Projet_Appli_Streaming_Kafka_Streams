@@ -53,7 +53,8 @@ object AggregateProcessor extends App {
 */
 
 
-/*
+
+  /*
   // calcul du chiffre d'affaire moyen
   val kCA3 = kstrFacture
     .map((k, f) => ("1", f))
@@ -66,9 +67,9 @@ object AggregateProcessor extends App {
           OrderLine("", "", "", "", 0D,0D, 0))
     )(Materialized.as("AggregateStore - M2")(String, Double)
     .mapValues(f => (f.quantite, f.total, f.total/f.quantite))
-
   kCA3.toStream.print(Printed.toSysOut().withLabel("Panier moyen du consommateur - M3"))
 */
+
 
   val topologie : Topology = str.build()
   val kkStream : KafkaStreams = new KafkaStreams(topologie, props)
