@@ -12,8 +12,6 @@ import serdes.{JSONDeserializer, JSONSerializer}
 import java.util.Properties
 
 
-
-
 object WindowingProcess extends App {
 
 
@@ -27,7 +25,7 @@ object WindowingProcess extends App {
 
 
   val props: Properties = new Properties()
-  props.put(StreamsConfig.APPLICATION_ID_CONFIG, "aggregate-processor")
+  props.put(StreamsConfig.APPLICATION_ID_CONFIG, "windowingProcess")
   props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
   props.put(StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG, "org.apache.kafka.streams.processor.WallclockTimestampExtractor")
   props.put("message.timestamp.type", "LogAppendTime")
