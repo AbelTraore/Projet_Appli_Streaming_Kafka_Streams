@@ -16,7 +16,7 @@ object FactureProducer extends App {
   val facture1 = List(Facture("a326", "téléviseur LG 3A Nano", 3, 3350.75, OrderLine("34e", "45i", "20/09/2010", "20/09/2010", 15.00, 700, 10)),
     Facture("a327", "téléviseur LG ", 3, 3350.75, OrderLine("34e", "45a", "20/09/2010", "20/09/2010", 15.00, 700, 10)),
     Facture("a328", "téléviseur LG 3A Nano", 3, 3350.75, OrderLine("34b", "45i", "20/09/2010", "20/09/2010", 15.00, 700, 10)),
-    Facture("a329", "téléviseur LG 3A ", 1, 3350.75, OrderLine("34e", "45i", "20/09/2010", "20/09/2010", 15.00, 700, 10)),
+    Facture("a329", "téléviseur LG 3A ", 1, 3350.75, OrderLine("34e", "45i", "21/09/2010", "20/09/2010", 15.00, 700, 10)),
     Facture("a330", "téléviseur LG Nano", 2, 3350.75, OrderLine("34e", "48i", "20/09/2010", "20/09/2010", 15.00, 700, 10)),
     Facture("a331", "téléviseur LG 2A Nano", 4, 3350.75, OrderLine("34e", "45i", "20/09/2010", "20/09/2010", 15.00, 700, 10))
   )
