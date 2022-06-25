@@ -20,3 +20,36 @@ case class OrderLine(
                       numunits : Int
 
                     )
+
+
+case class DetailsCommande(
+                            orderid : Long,
+                            productid : Long,
+                            shipdate : String,
+                            billdate : String,
+                            unitprice : Double,
+                            numunits : Int,
+                            totalprice : Double
+                          )
+
+case class Commande(
+                     customerid : Long,
+                     campaignid : Long,
+                     orderdate : String,
+                     city : String,
+                     state : String,
+                     paymenttype : String
+                   )
+
+case class CommandeComplet(
+                            orderid : Long,
+                            productid : Long,
+                            shipdate : String,
+                            billdate : String,
+                            unitprice : Double,
+                            numunits : Int,
+                            totalprice : Double,
+                            city : String,
+                            state : String
+                          )
+

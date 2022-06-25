@@ -1,13 +1,15 @@
 package processors.statefull
 
 import org.apache.kafka.common.serialization.{Serde, Serdes}
-import org.apache.kafka.streams.kstream.Printed
+import org.apache.kafka.streams.kstream.{Printed, Aggregator}
 import org.apache.kafka.streams.scala._
 import org.apache.kafka.streams.scala.kstream._
 import org.apache.kafka.streams.{KafkaStreams, StreamsConfig, Topology}
 import schemas.Facture
 import schemas._
 import serdes.{JSONDeserializer, JSONSerializer}
+
+
 
 import java.util.Properties
 

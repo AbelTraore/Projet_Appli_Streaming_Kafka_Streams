@@ -16,6 +16,7 @@ import java.util.Properties
 object WindowingProcess extends App {
 
 
+  import org.apache.kafka.streams.scala.ImplicitConversions._
   import org.apache.kafka.streams.scala.Serdes.{String, _}
   import org.apache.kafka.streams.scala.Serdes._
 
@@ -26,7 +27,7 @@ object WindowingProcess extends App {
 
 
   val props: Properties = new Properties()
-  props.put(StreamsConfig.APPLICATION_ID_CONFIG, "windowingProcess-intermediaire")
+  props.put(StreamsConfig.APPLICATION_ID_CONFIG, "windowingProcess-intermediaire1")
   props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
   props.put(StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG, "org.apache.kafka.streams.processor.WallclockTimestampExtractor")
   props.put("message.timestamp.type", "LogAppendTime")
@@ -43,14 +44,14 @@ object WindowingProcess extends App {
     .aggregate[Double](0D)((key, newValue, aggValue) => aggValue + newValue)(Materialized.as("AggregateStore5")(String, Double))
 
 
- // kCA.toStream.print(Printed.toSysOut().withLabel("Chiffre d'affaire global"))
+  kCA.toStream.print(Printed.toSysOut().withLabel("Chiffre d'affaire global"))
 
 
   // fenêtres fixes
   val kCA_ff : KTable[Windowed[String], Long] = kstrFacture
     .map((k, f) => (k, f.total))
     .groupBy((k, t) => k)(Grouped.`with`(String, Double ))
-    .windowedBy(TimeWindows.of(Duration.ofSeconds(15)))
+    .windowedBy(TimeWindows.of(Duration.ofSeconds(15)).grace(Duration.ofSeconds(5)))  // rajout d'une période de grâce de 5 secondes pour cloturer la fenêtre
     .count()(Materialized.as("FenetresFixes")(String, Long))
 
   //kCA_ff.toStream.print(Printed.toSysOut().withLabel("Comptage Fenêtres Fixes"))
@@ -89,7 +90,7 @@ object WindowingProcess extends App {
 
 
 
-  /*
+/*
     // méthode 2
     val kCA2 = kstrFacture
       .map((k, f) => ("1", f))
@@ -98,7 +99,8 @@ object WindowingProcess extends App {
 
 
     kCA2.toStream.print(Printed.toSysOut().withLabel("Chiffre d'affaire global - M2"))
-  */
+
+*/
 
 
 
