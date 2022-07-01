@@ -23,8 +23,8 @@ case class OrderLine(
 
 
 case class DetailsCommande(
-                            orderid : Long,
-                            productid : Long,
+                            orderid : String,
+                            productid : String,
                             shipdate : String,
                             billdate : String,
                             unitprice : Double,
@@ -33,8 +33,8 @@ case class DetailsCommande(
                           )
 
 case class Commande(
-                     customerid : Long,
-                     campaignid : Long,
+                     customerid : String,
+                     campaignid : String,
                      orderdate : String,
                      city : String,
                      state : String,
@@ -42,8 +42,8 @@ case class Commande(
                    )
 
 case class CommandeComplet(
-                            orderid : Long,
-                            productid : Long,
+                            orderid : String,
+                            productid : String,
                             shipdate : String,
                             billdate : String,
                             unitprice : Double,

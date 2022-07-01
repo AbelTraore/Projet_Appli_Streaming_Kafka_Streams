@@ -32,7 +32,7 @@ object KstreamKstreamJoin extends App {
 
 
   val props: Properties = new Properties()
-  props.put(StreamsConfig.APPLICATION_ID_CONFIG, "kstream-kstream-join")
+  props.put(StreamsConfig.APPLICATION_ID_CONFIG, "kstream-kstream-join5")
   props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
 
 
@@ -40,12 +40,11 @@ object KstreamKstreamJoin extends App {
   val kstrCommande : KStream[String, Commande] = str.stream[String, Commande]("commande")(consumedCommandes)
   val kstrDtlCommande : KStream[String, DetailsCommande] = str.stream[String, DetailsCommande]("DetailsCommande")(consumedDetailsCommandes)
 
+  //kstrDtlCommande.print(Printed.toSysOut().withLabel("DetailsCommandes"))
 
-  kstrDtlCommande.print(Printed.toSysOut().withLabel("DetailsCommandes"))
-
-
-  val kjoin = kstrDtlCommande.join(kstrCommande)((d : DetailsCommande, c : Commande) => {
-
+  val kstrDtlCommandeGood : KStream[String, DetailsCommande] = kstrDtlCommande.selectKey((k, v) => v.orderid) // changement de clé
+  val kjoin = kstrDtlCommandeGood.join(kstrCommande)((d : DetailsCommande, c : Commande) =>
+  {
     CommandeComplet(d.orderid, d.productid, d.shipdate, d.billdate,
       d.unitprice, d.numunits, d.totalprice, c.city, c.state)
 
