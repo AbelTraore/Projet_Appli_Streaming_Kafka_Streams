@@ -41,7 +41,7 @@ object KstreamKstreamJoin extends App {
   val kstrDtlCommande : KStream[String, DetailsCommande] = str.stream[String, DetailsCommande]("DetailsCommande")(consumedDetailsCommandes)
 
 
- // kstrDtlCommande.print(Printed.toSysOut().withLabel("DetailsCommandes"))
+  kstrDtlCommande.print(Printed.toSysOut().withLabel("DetailsCommandes"))
 
 
   val kjoin = kstrDtlCommande.join(kstrCommande)((d : DetailsCommande, c : Commande) => {
@@ -52,7 +52,7 @@ object KstreamKstreamJoin extends App {
   }, JoinWindows.of(Duration.ofMinutes(5))
   )
 
-  //kjoin.to("commandeComplet")(produced)
+ // kjoin.to("commandeComplet")(produced)
 
   kjoin.print(Printed.toSysOut().withLabel("Jointure KStreams-à-KStreams"))
 
