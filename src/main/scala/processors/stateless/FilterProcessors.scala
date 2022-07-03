@@ -10,15 +10,21 @@ import org.apache.kafka.streams.KafkaStreams
 import schemas.{Facture, OrderLine}
 import serdes.{JSONDeserializer, JSONSerializer}
 import org.apache.kafka.common.serialization.{Serde, Serdes}
-
+import org.apache.kafka.streams.kstream.Printed
 import org.apache.kafka.streams.scala.Serdes.Double
 
 
-object FilterProcessors extends App {
+object FilterProcessors {
 
   val props: Properties = new Properties()
   props.put(StreamsConfig.APPLICATION_ID_CONFIG, "map-processor")
   props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
+
+
+  def main(args: Array[String]): Unit = {
+    run()
+  }
+
 
   def topologie() : Topology = {
 
@@ -37,6 +43,8 @@ object FilterProcessors extends App {
     //val kstrFiltNot = kstrTotal.filterNot((_,t) => t > 2000)
 
     kstrTotal.to("topic-test")(produced)
+
+    kstrTotal.print(Printed.toSysOut().withLabel("résultat du CA"))
 
 
     val topologie: Topology = str.build()
