@@ -13,10 +13,22 @@ import org.apache.kafka.streams.scala.Serdes.Double
 
 object Deploy_prod {
 
+
   val props: Properties = new Properties()
   props.put(StreamsConfig.APPLICATION_ID_CONFIG, "map-processor")
   props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
-  props.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, "2L")
+  props.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 2L)
+
+  props.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 10000L)
+  props.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 10 * 1024 * 1024L)
+  props.put(StreamsConfig.RETRIES_CONFIG, 3)
+  props.put(StreamsConfig.REQUEST_TIMEOUT_MS_CONFIG,  305000)
+  props.put(StreamsConfig.NUM_STANDBY_REPLICAS_CONFIG, 2)
+  props.put(StreamsConfig.REPLICATION_FACTOR_CONFIG, 3)
+  props.put(StreamsConfig.TOPOLOGY_OPTIMIZATION, StreamsConfig.OPTIMIZE)
+
+  props.put("cleanup.policy", "compact")
+
 
 
   def main(args: Array[String]): Unit = {
