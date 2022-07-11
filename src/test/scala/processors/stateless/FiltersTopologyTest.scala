@@ -63,7 +63,7 @@ class FiltersTopolgyTest {
     val resultatTopology = testDriver.readOutput("topic-test", new StringDeserializer, new DoubleDeserializer)
 
     // test 2
-   // assert(150 < resultatTopology.value().toInt)
+    assert(150 <= resultatTopology.value().toInt)
 
   }
 
