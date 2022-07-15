@@ -52,7 +52,7 @@ class FiltersTopolgyTest {
 
   @Test
   @Order(2)
-  @DisplayName("Test 2 : vérification du chiffre d'affaire de la facture supérieure")
+  @DisplayName("Test 2 : vérification du chiffre d'affaire de la facture supérieure ou égale")
   def testCAFacture2(): Unit = {
     val facture1 = Facture("a326", "téléviseur LG 3A Nano", 3, 3350.75,
       OrderLine("34e", "45i", "20/09/2010", "20/09/2010", 15.00, 700, 10))
